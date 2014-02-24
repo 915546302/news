@@ -1,3 +1,4 @@
+#-*-coding:utf-8-*-
 import platform
 import urllib2,sys
 import os
@@ -5,6 +6,7 @@ from PyQt4.QtWebKit import *
 from PyQt4.QtCore import *  
 from PyQt4.QtGui import * 
 import time
+import images_qr
 class News(object):
 	
 	def __init__(self):
@@ -73,14 +75,18 @@ class Read(QDialog):
 		QDialog.__init__(self)
 		#self.setWindowFlags(w.windowFlags()&~Qt.WindowContextHelpButtonHint)
 		self.setWindowTitle('Content')
-		self.setWindowIcon(QIcon('news.png'))
+		self.setWindowIcon(QIcon(':/news.png'))
 		self.webview=QWebView(self)
-		self.resize(600,810)
-		self.setFixedWidth(600)
+		height=800
+		tmpheight=QDesktopWidget().screenGeometry().height()
+		if tmpheight<height:
+			height=tmpheight-50
+		self.resize(660,height)
+		self.setFixedWidth(660)
 	def load(self,url):
 		rev=Review(unicode(url.toString()))
 		self.webview.setHtml(rev.getHtml())
-		self.webview.resize(600,800)
+		self.webview.resize(660,800)
 class WebView(QWebView):
 	DATA=None
 	def __init__(self,parent=None):
@@ -121,7 +127,7 @@ class Web(QWidget):
 	def __init__(self):
 		QWidget.__init__(self)
 	
-		home=QPushButton("Home")
+		home=QPushButton(u"刷新")
 		back=QPushButton("Back")
 		home.setStyleSheet("color: red;")
 		hbox = QHBoxLayout()
@@ -139,8 +145,12 @@ class Web(QWidget):
 		self.setLayout(vbox)
 
 		self.setWindowTitle('News')
-		self.setWindowIcon(QIcon('news.png'))
-		self.resize(350,800)
+		self.setWindowIcon(QIcon(':/news.png'))
+		height=800
+		tmpheight=QDesktopWidget().screenGeometry().height()
+		if tmpheight<height:
+			height=tmpheight-50
+		self.resize(350,height)
 		self.setFixedWidth(350)
 		
 		self.connect(home,SIGNAL('clicked()'),\
